@@ -40,6 +40,7 @@ trait SMSManager
     public function sendSMS($data, $birthday_or_schedule = false)
     {
         $mobileNumbers = '';
+        $responseData = [];
 
         if(isset($data['groupss']) && $data['groups'] === 'all') {
             $mobileNumbers = Contacts::whereNotNull('mobile_no')->where('active', 1)->pluck('mobile_no')->implode(',');
@@ -104,7 +105,7 @@ trait SMSManager
             $responseData = json_decode($body, true);
 
             $mobileNumbers_ = explode(",", $mobileNumbers);
-
+           
             foreach($mobileNumbers_ as $mobileNumber)
             {
                 $dt['numbers'] = $mobileNumber;
@@ -119,11 +120,11 @@ trait SMSManager
                 $this->warning('something went wrong !!');
             }
 
-            return $responseData;
-
         } catch (\Exception $e) {
             $this->warning('An error occured !!');
         }
+
+        return $responseData;
     }
 
     /**

@@ -5,7 +5,7 @@
         <div class="name">
             <div>
                 <div class="top" style="font-weight: bolder; font-size: 1.3rem;color:green;">LANA</div>
-                <hr style="border-color: #fe0000; width: 100%; border-width: 2px;">
+                <hr style="border-color: #fe0000; width: 100%;">
                 <div class="bottom" style="font-weight: bold; font-size: .9rem;color:red;">Hospital</div>
             </div>
         </div>

@@ -44,8 +44,6 @@ class SchedulerMessagesCommand extends Command
         $data = [];
         $response = [];
         $currentTime = now();
-        $windowStart = $currentTime->clone()->subMinutes(5);
-        $windowEnd = $currentTime->clone()->addMinutes(5);
 
         $schedules = Scheduler::where('active', true)
             ->whereDate('scheduled_at', $currentTime)
