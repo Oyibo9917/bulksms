@@ -144,8 +144,8 @@ class SchedulerResource extends Resource
     {
         return [
             'index' => Pages\ListSchedulers::route('/'),
-            'create' => Pages\CreateScheduler::route('/create'),
-            'edit' => Pages\EditScheduler::route('/{record}/edit'),
+            // 'create' => Pages\CreateScheduler::route('/create'),
+            // 'edit' => Pages\EditScheduler::route('/{record}/edit'),
         ];
     }
 }

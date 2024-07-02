@@ -204,8 +204,8 @@ class ContactsResource extends Resource
     {
         return [
             'index' => Pages\ListContacts::route('/'),
-            'create' => Pages\CreateContacts::route('/create'),
-            'edit' => Pages\EditContacts::route('/{record}/edit'),
+            // 'create' => Pages\CreateContacts::route('/create'),
+            // 'edit' => Pages\EditContacts::route('/{record}/edit'),
         ];
     }
 }

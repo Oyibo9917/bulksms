@@ -95,8 +95,8 @@ class MessagesResource extends Resource
     {
         return [
             'index' => Pages\ListMessages::route('/'),
-            'create' => Pages\CreateMessages::route('/create'),
-            'edit' => Pages\EditMessages::route('/{record}/edit'),
+            // 'create' => Pages\CreateMessages::route('/create'),
+            // 'edit' => Pages\EditMessages::route('/{record}/edit'),
         ];
     }
 }
