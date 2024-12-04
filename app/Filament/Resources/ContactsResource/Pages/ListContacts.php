@@ -41,8 +41,7 @@ class ListContacts extends ListRecords
             Action::make('Test Sms')
                 ->action(function () {
                     $this->sendEmail();
-                })
-                ->form([FileUpload::make('attachment')])->modalWidth(MaxWidth::Large),
+                }),
             Action::make('Sms')
                 ->label('SMS')
                 ->action(function (array $data) {
