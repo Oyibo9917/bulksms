@@ -18,7 +18,7 @@ trait SMSManager
     protected $apiUrl = 'https://my.kudisms.net/api/';
     protected $header = 'Lana Hos';
     // protected $header = 'Prime Test';
-    protected $token  = '8oFu3DmPdarRMvXOs1xTA7jZEfgQJBWKLNC9lVUIbqyc60nwt4H2G5SipYkzhe'; //lana hosp
+    protected $token  = 'eWjkmJQEF9CHBDrvVZpGYTdP1fa5NKUgtyz7xXM62uw84nRSLI0oscOhq3blAi'; //lana hosp
     // protected $token  = '45cQHF7Bfgm0KIaAsWE1jw9kGTDXtVNv6PuqpMxRYCzhSZLol8yUO3iJn2bedr'; //prime-test
 
    
@@ -132,7 +132,7 @@ trait SMSManager
      *
      * @return float
      */
-    public function checkSMSBalance(): float
+    public function checkSMSBalance()
     {
         $options = [
             'multipart' => [
@@ -151,8 +151,9 @@ trait SMSManager
             $body = $res->getBody()->getContents();
             $responseData = json_decode($body, true);
 
+
             if (isset($responseData['msg'])) {
-                $bal = (float) $responseData['msg'];
+                $bal =  $responseData['msg'];
                 // $this->fund($bal);
 
                 return $bal;

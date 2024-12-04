@@ -19,6 +19,8 @@ class ProcessUploadJob implements ShouldQueue
 
     protected $data;
 
+    public $tries = 10;
+
     /**
      * Create a new job instance.
      */
