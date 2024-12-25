@@ -71,7 +71,8 @@ trait SMSManager
         }
 
         // First, split the mobile numbers string into an array of individual numbers
-$mobileNumbers_ = explode(",", $mobileNumbers);
+        $mobileNumbers_ = explode(",", $mobileNumbers);
+        $responseData = null;
 
         // Split the mobile numbers array into chunks of 100
         $chunkedNumbers = array_chunk($mobileNumbers_, 100);
@@ -126,17 +127,17 @@ $mobileNumbers_ = explode(",", $mobileNumbers);
                     $this->createSmsHistory($dt, $responseData);
                 }
         
-                // Check the response and log success/failure
-                if (isset($responseData['error_code']) && $responseData['error_code'] === '000') {
-                    $this->success('Sent successfully');
-                } else {
-                    $this->warning('Something went wrong !!');
-                }
-        
             } catch (\Exception $e) {
                 // Handle exceptions (e.g., API failure)
                 $this->warning('An error occurred !!');
             }
+        }
+        
+        // Check the response and log success/failure
+        if (isset($responseData['error_code']) && $responseData['error_code'] === '000') {
+            $this->success('Sent successfully');
+        } else {
+            $this->warning('Something went wrong !!');
         }
 
         return $responseData;
