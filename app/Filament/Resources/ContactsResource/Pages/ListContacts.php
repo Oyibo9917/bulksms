@@ -38,10 +38,10 @@ class ListContacts extends ListRecords
                     $this->upload($data);
                 })
                 ->form([FileUpload::make('attachment')])->modalWidth(MaxWidth::Large),
-            Action::make('Test Sms')
-                ->action(function () {
-                    $this->sendEmail();
-                }),
+            // Action::make('Test Sms')
+            //     ->action(function () {
+            //         $this->sendEmail();
+            //     }),
             Action::make('Sms')
                 ->label('SMS')
                 ->action(function (array $data) {

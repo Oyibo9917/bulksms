@@ -43,9 +43,9 @@ trait ImportHelper
         $this->information('Processing!!...');
     }
 
-    public function sendEmail()
-    {
-        $user = App\Models\User::find(1); // Fetch the user
-        Mail::to($user->email)->send(new NotificationEmail($user));
-    }
+    // public function sendEmail()
+    // {
+    //     $user = App\Models\User::find(2); // Fetch the user
+    //     Mail::to($user->email)->send(new NotificationEmail($user));
+    // }
 }

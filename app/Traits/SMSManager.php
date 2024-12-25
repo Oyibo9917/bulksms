@@ -42,7 +42,7 @@ trait SMSManager
         $mobileNumbers = '';
         $responseData = [];
 
-        if(isset($data['groupss']) && $data['groups'] === 'all') {
+        if(isset($data['groups']) && $data['groups'] === 'all') {
             $mobileNumbers = Contacts::whereNotNull('mobile_no')->where('active', 1)->pluck('mobile_no')->implode(',');
         }
 
@@ -70,58 +70,73 @@ trait SMSManager
             $this->failure('Incorrect credencials');
         }
 
-        $options = [
-            'multipart' => [
-                [
-                    'name' => 'token',
-                    'contents' => $this->token
-                ],
-                [
-                    'name' => 'senderID',
-                    'contents' => $this->senderId
-                ],
-                [
-                    'name' => 'recipients',
-                    'contents' => $mobileNumbers
-                ],
-                [
-                    'name' => 'message',
-                    'contents' => $data['content']
-                ],
-                [
-                    'name' => 'gateway',
-                    'contents' => '2'
-                ]
-            ]
-        ];
+        // First, split the mobile numbers string into an array of individual numbers
+$mobileNumbers_ = explode(",", $mobileNumbers);
 
+        // Split the mobile numbers array into chunks of 30
+        $chunkedNumbers = array_chunk($mobileNumbers_, 30);
         
-        try {
-            $request = new Request('GET', $this->apiUrl . '/sms?token=' . $this->token . '&senderID=' . 
-                $this->senderId . '&recipients=' .$mobileNumbers . '&message=' . $data['content'] . '&gateway=2');
-            $client = new Client();
-            $res = $client->sendAsync($request, $options)->wait();
-            $body = $res->getBody()->getContents();
-            $responseData = json_decode($body, true);
-
-            $mobileNumbers_ = explode(",", $mobileNumbers);
-           
-            foreach($mobileNumbers_ as $mobileNumber)
-            {
-                $dt['numbers'] = $mobileNumber;
-                $dt['content'] = $data['content'];
-
-                $this->createSmsHistory($dt, $responseData);
+        foreach ($chunkedNumbers as $chunk) {
+            // Join the chunk back into a string
+            $chunkedNumbersString = implode(",", $chunk);
+        
+            // Prepare the $options array for each chunk
+            $options = [
+                'multipart' => [
+                    [
+                        'name' => 'token',
+                        'contents' => $this->token
+                    ],
+                    [
+                        'name' => 'senderID',
+                        'contents' => $this->senderId
+                    ],
+                    [
+                        'name' => 'recipients',
+                        'contents' => $chunkedNumbersString
+                    ],
+                    [
+                        'name' => 'message',
+                        'contents' => $data['content']
+                    ],
+                    [
+                        'name' => 'gateway',
+                        'contents' => '2'
+                    ]
+                ]
+            ];
+        
+            try {
+                // Build the request for each chunk
+                $request = new Request('GET', $this->apiUrl . '/sms?token=' . $this->token . '&senderID=' . 
+                    $this->senderId . '&recipients=' . $chunkedNumbersString . '&message=' . $data['content'] . '&gateway=2');
+                
+                // Send the request asynchronously
+                $client = new Client();
+                $res = $client->sendAsync($request, $options)->wait();
+                $body = $res->getBody()->getContents();
+                $responseData = json_decode($body, true);
+        
+                // After sending the SMS, process each number in the chunk
+                foreach ($chunk as $mobileNumber) {
+                    $dt['numbers'] = $mobileNumber;
+                    $dt['content'] = $data['content'];
+        
+                    // Record SMS history for each mobile number
+                    $this->createSmsHistory($dt, $responseData);
+                }
+        
+                // Check the response and log success/failure
+                if (isset($responseData['error_code']) && $responseData['error_code'] === '000') {
+                    $this->success('Sent successfully');
+                } else {
+                    $this->warning('Something went wrong !!');
+                }
+        
+            } catch (\Exception $e) {
+                // Handle exceptions (e.g., API failure)
+                $this->warning('An error occurred !!');
             }
-
-            if (isset($responseData['error_code']) && $responseData['error_code'] === '000') {
-                $this->success('sent successfully');
-            } else {
-                $this->warning('something went wrong !!');
-            }
-
-        } catch (\Exception $e) {
-            $this->warning('An error occured !!');
         }
 
         return $responseData;
