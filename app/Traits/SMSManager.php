@@ -73,8 +73,8 @@ trait SMSManager
         // First, split the mobile numbers string into an array of individual numbers
 $mobileNumbers_ = explode(",", $mobileNumbers);
 
-        // Split the mobile numbers array into chunks of 30
-        $chunkedNumbers = array_chunk($mobileNumbers_, 30);
+        // Split the mobile numbers array into chunks of 100
+        $chunkedNumbers = array_chunk($mobileNumbers_, 100);
         
         foreach ($chunkedNumbers as $chunk) {
             // Join the chunk back into a string
